@@ -18,3 +18,4 @@ def test_cv_analysis(sample_image):
     assert "structural_risk_score" in res
     assert "cv_site_delay_factor" in res
     assert isinstance(res["detected_anomalies"], list)
+
