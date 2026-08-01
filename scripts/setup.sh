@@ -33,3 +33,4 @@ echo "Seeding SQLite database..."
 python3 scripts/seed_db.py
 
 echo "=== Setup completed successfully! Run 'make run' or 'python3 app.py' to start the server ==="
+
