@@ -17,3 +17,4 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Premium glassmorphism interactive web dashboard with real-time sliders, visual dropzone, and Chart.js metrics.
 - Comprehensive automated test suite (`pytest`) covering API, DB, model, CV, weather, and configuration modules.
 - Setup scripts, Makefile, `.env.example`, MIT License, developer documentation, and architecture specifications.
+
