@@ -275,3 +275,4 @@ class RiskPredictor:
         scenario_inputs["supply_chain_delay_score"] = float(np.clip(orig_sc + supply_chain_delta, 0.0, 1.0))
 
         return self.predict(scenario_inputs)
+
