@@ -42,3 +42,4 @@ The Project Cost & Schedule Risk Prediction Platform is built on a modular decis
 
 4. **Persistence Layer (`db.py`)**:
    - SQLite relational schema tracking projects, prediction runs, site photo analysis logs, weather forecasts, and scenario stress-test outputs.
+
