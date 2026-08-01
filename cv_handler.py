@@ -100,3 +100,4 @@ class CVInspectionHandler:
                 "contrast": 50.0,
                 "detected_anomalies": [f"Image processing note: {str(e)}"]
             }
+
