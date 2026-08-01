@@ -1,6 +1,6 @@
 <div align="center">
 
-![header](https://capsule-render.vercel.app/api?type=rect&color=0:0D1117,100:1A2744&height=90&text=%F0%9F%93%88%20Project%20Risk%20Intelligence&fontSize=28&fontColor=E6EDF3&fontAlignY=55&desc=Cost%20%26%20Schedule%20Overrun%20Prediction%20Engine&descSize=14&descAlignY=78&descColor=7EA8BE)
+![header](https://capsule-render.vercel.app/api?type=rect&color=0:0D1117,100:1A2744&height=90&text=Project%20Risk%20Intelligence&fontSize=28&fontColor=E6EDF3&fontAlignY=55&desc=Cost%20and%20Schedule%20Overrun%20Prediction%20Engine&descSize=14&descAlignY=78&descColor=7EA8BE)
 
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![XGBoost](https://img.shields.io/badge/XGBoost-189AB4?style=flat-square&logoColor=white)]()
