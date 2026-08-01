@@ -67,3 +67,4 @@ class WeatherEngine:
             "schedule_penalty_weeks": schedule_penalty_weeks,
             "mitigation_advice": mitigation
         }
+
