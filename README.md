@@ -1,141 +1,103 @@
-# Project Risk Intelligence — Predictive Cost & Schedule Overrun Analytics Platform
+<div align="center">
 
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.4-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![XGBoost](https://img.shields.io/badge/XGBoost-2.0-239120?style=flat-square)](https://xgboost.readthedocs.io/)
-[![LightGBM](https://img.shields.io/badge/LightGBM-4.0-02569B?style=flat-square)](https://lightgbm.readthedocs.io/)
-[![Flask 3.0](https://img.shields.io/badge/Flask-3.0-000000?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![License MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+![header](https://capsule-render.vercel.app/api?type=rect&color=0:0D1117,100:1A2744&height=90&text=%F0%9F%93%88%20Project%20Risk%20Intelligence&fontSize=28&fontColor=E6EDF3&fontAlignY=55&desc=Cost%20%26%20Schedule%20Overrun%20Prediction%20Engine&descSize=14&descAlignY=78&descColor=7EA8BE)
 
----
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![XGBoost](https://img.shields.io/badge/XGBoost-189AB4?style=flat-square&logoColor=white)]()
+[![LightGBM](https://img.shields.io/badge/LightGBM-02569B?style=flat-square&logoColor=white)]()
+[![License](https://img.shields.io/badge/License-MIT-22863A?style=flat-square)](LICENSE)
 
-## Technical Overview
-
-Project Risk Intelligence is an end-to-end predictive analytics engine designed to forecast construction and engineering project cost overruns and completion timeline delays. The system incorporates **XGBoost and LightGBM ensemble gradient boosting models**, advanced feature engineering, microclimate weather disruption indices, and explainable risk factor scoring to provide decision intelligence for resource allocation.
+</div>
 
 ---
 
-## Core System Architecture
+## Overview
 
-```
-Project Attributes & Environmental Parameters
-                     |
-                     v
-+-----------------------------------------------------------------------+
-|  Flask REST API Layer  (app.py)                                       |
-|    +-- POST /api/v1/predict           Predict Cost & Schedule Risk    |
-|    +-- GET  /api/v1/risk-factors      Feature Importance & Breakdown  |
-|    +-- GET  /api/v1/health            System Status & Model Version   |
-+-----------------------------------------------------------------------+
-        |                                       |
-        v                                       v
-+-------------------------------+   +-----------------------------------+
-|  Ensemble ML Engine           |   |  Weather Disruption Index Engine  |
-|  (model.py)                   |   |  (weather_engine.py)              |
-|  - XGBoost Regressor          |   |  - Seasonal Rain & Temp Disruption|
-|  - LightGBM Regressor         |   |  - Regional Delay Factor Calc     |
-|  - Weighted Ensemble Averaging|   +-----------------------------------+
-+-------------------------------+                       |
-        |                                               |
-        +-----------------------+-----------------------+
-                                |
-                                v
-+-----------------------------------------------------------------------+
-|  Explainable Risk & Decision Intelligence Module                      |
-|  - Quantitative Feature Importance Scoring (Gain & Cover)             |
-|  - Scenario-based Mitigation Strategy Recommendations                |
-+-----------------------------------------------------------------------+
-                                |
-                                v
-+-----------------------------------------------------------------------+
-|  SQLite Persistence Layer  (db.py)                                    |
-|  - risk_predictions table (Historical Evaluation Logs)                |
-+-----------------------------------------------------------------------+
-```
+Project Risk Intelligence forecasts construction and infrastructure project cost overruns and schedule delays using an XGBoost + LightGBM ensemble. The core work is in the feature engineering — raw project inputs are transformed into 13 domain-specific risk signals including contractor performance scores, site complexity indices, and seasonal disruption factors. Predictions include feature importance breakdowns and scenario simulation, making it a planning tool rather than a black-box risk score.
 
----
+## Features
 
-## Predictive Ensemble Model & Evaluation
+- **Dual prediction targets** — Cost overrun percentage and schedule delay weeks in a single inference pass
+- **Ensemble models** — XGBoost + LightGBM with Gradient Boosting and Random Forest fallbacks
+- **Domain feature engineering** — 13 derived features from 8 raw project inputs
+- **Scenario simulation** — Adjust input parameters and compare risk outcomes side by side
+- **CV inspection integration** — Site delay factors sourced from computer vision inspection reports
+- **Weather risk engine** — Environmental disruption scoring for outdoor construction projects
+- **REST API** — Full JSON API with CORS support
 
-The predictive engine combines Gradient Boosted Decision Trees (GBDT) via a weighted ensemble model evaluating project features including baseline budget, scheduled duration, team size, contractor rating, site complexity index, and weather delay factor.
+## Tech Stack
 
-### Regression Metrics Summary:
+[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![XGBoost](https://img.shields.io/badge/XGBoost-189AB4?style=flat-square&logoColor=white)]()
+[![LightGBM](https://img.shields.io/badge/LightGBM-02569B?style=flat-square&logoColor=white)]()
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
+[![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://sqlite.org)
 
-$$\text{Ensemble Prediction} = w_1 \cdot \hat{y}_{\text{XGBoost}} + w_2 \cdot \hat{y}_{\text{LightGBM}} \quad (w_1 = 0.55, w_2 = 0.45)$$
+## Feature Engineering
 
-| Evaluated Target | Model Variant | $R^2$ Score | Root Mean Squared Error (RMSE) | Mean Absolute Error (MAE) |
-| :--- | :--- | :--- | :--- | :--- |
-| **Cost Overrun (%)** | XGBoost | 0.884 | 3.12% | 2.24% |
-| **Cost Overrun (%)** | LightGBM | 0.891 | 3.04% | 2.18% |
-| **Cost Overrun (%)** | **Ensemble** | **0.908** | **2.81%** | **1.96%** |
-| **Timeline Delay (Days)** | **Ensemble** | **0.895** | **4.12 Days** | **3.05 Days** |
+Raw inputs are engineered into 13 model features:
 
----
+| Feature | Description |
+|:--|:--|
+| `budget` | Total project budget |
+| `planned_duration_weeks` | Planned timeline |
+| `team_size` | Engineering team headcount |
+| `complexity_score` | Project complexity rating (1–10) |
+| `contractor_experience_years` | Lead contractor track record |
+| `scope_changes_count` | Number of scope revisions |
+| `weather_risk_index` | Seasonal disruption probability |
+| `supply_chain_delay_score` | Material procurement risk |
+| `cv_site_delay_factor` | Vision-assessed site delay signal |
+| `budget_per_week` | Budget burn rate |
+| `budget_per_team` | Resource allocation density |
+| `complexity_per_team` | Cognitive load index |
+| `risk_pressure_index` | Composite risk pressure signal |
 
-## Feature Importance Breakdown
+## Getting Started
 
-Feature importance is calculated across tree splits using gain metrics to provide model explainability:
+### Prerequisites
 
-```
-Contractor Rating Factor   ========================> 32.4%
-Site Complexity Index     =====================> 26.1%
-Weather Disruption Index  =============> 18.5%
-Initial Budget Variance   =========> 12.8%
-Team Size Ratio           ======> 10.2%
-```
+- Python 3.9+
 
----
+### Installation
 
-## REST API Reference
-
-| Method | Endpoint | Payload Sample | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/health` | — | System health, model versions, and engine status |
-| `POST` | `/api/v1/predict` | `{"budget_lakhs": 45.0, "duration_months": 12, "team_size": 18, "site_complexity": 0.75, "contractor_rating": 3.8}` | Predicts cost overrun %, expected delay days, and risk level |
-| `GET` | `/api/v1/history` | — | Historical risk predictions from SQLite database |
-
----
-
-## Quick Start & Installation
-
-### 1. Requirements
-- Python 3.10+
-- Linux / macOS / Windows
-
-### 2. Environment Setup
 ```bash
 git clone https://github.com/Aryansh909/project-risk-intelligence.git
 cd project-risk-intelligence
-
-python3 -m venv venv
-source venv/bin/activate
-
-pip install -r requirements.txt
 cp .env.example .env
-```
-
-### 3. Execution
-```bash
+pip install -r requirements.txt
 python app.py
-# or using Makefile:
-make run
-```
-Access API server at `http://localhost:5000`.
-
----
-
-## Automated Test Verification
-
-The project includes an automated test suite (`pytest`) validating machine learning feature transformations, model outputs, database persistence, and REST endpoints:
-
-```bash
-make test
-# or
-pytest tests/ -v
 ```
 
----
+Dashboard → `http://localhost:5000`
+
+## API Reference
+
+| Method | Endpoint | Description |
+|:--|:--|:--|
+| `GET` | `/api/health` | Service health check |
+| `POST` | `/api/predict` | Predict cost overrun + schedule delay |
+| `GET` | `/api/history` | Past prediction history |
+| `POST` | `/api/simulate` | Scenario simulation |
+| `GET` | `/api/features` | Feature importance breakdown |
+
+## Project Structure
+
+```
+project-risk-intelligence/
+├── app.py              # Flask application factory, routes
+├── model.py            # XGBoost + LightGBM ensemble predictor
+├── cv_handler.py       # CV inspection delay factor handler
+├── weather_engine.py   # Weather risk scoring engine
+├── config.py           # Environment configuration
+├── db.py               # SQLite persistence
+├── frontend/           # Web dashboard
+├── models/             # Saved model weights
+├── tests/              # pytest test suite
+└── scripts/            # Setup utilities
+```
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+[MIT](LICENSE)
