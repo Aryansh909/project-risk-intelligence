@@ -97,3 +97,4 @@ The Project Cost & Schedule Risk Prediction API exposes endpoints for risk calcu
 ### 6. Projects & Analytics
 - `GET /api/projects`: List registered projects and risk histories.
 - `GET /api/analytics/metrics`: Retrieve validation performance metrics (R2, MAE, RMSE).
+
