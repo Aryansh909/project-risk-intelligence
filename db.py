@@ -208,3 +208,4 @@ class Database:
                   float(simulated_delay_weeks), float(simulated_risk_score)))
             conn.commit()
             return cursor.lastrowid
+
