@@ -14,3 +14,4 @@ def test_weather_evaluation():
     assert res["adverse_days_projected"] >= 0
     assert res["schedule_penalty_weeks"] >= 0.0
     assert "mitigation_advice" in res
+
