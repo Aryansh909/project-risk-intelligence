@@ -54,3 +54,4 @@ def test_scenario_simulation(predictor):
         weather_factor_delta=0.3
     )
     assert "risk_score" in sim_res
+
