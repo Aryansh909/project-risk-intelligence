@@ -59,3 +59,4 @@ def test_save_prediction(temp_db):
     latest = temp_db.get_latest_prediction(project_id)
     assert latest["predicted_cost_overrun_pct"] == 15.5
     assert latest["risk_category"] == "Medium"
+
