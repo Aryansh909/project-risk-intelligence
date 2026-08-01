@@ -12,3 +12,4 @@ def test_testing_config():
     assert TestingConfig.TESTING is True
     assert TestingConfig.DEBUG is False
     assert "test_" in TestingConfig.DB_NAME
+
