@@ -70,3 +70,4 @@ def test_analytics_metrics_endpoint(client):
     data = res.get_json()
     assert "cost_model_metrics" in data
     assert "schedule_model_metrics" in data
+
