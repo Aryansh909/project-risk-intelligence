@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Cost & Schedule Risk Prediction Platform</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Header -->
+        <header class="navbar glass-card">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>RiskIntelligence<span>AI</span></h1>
+                    <p>Project Cost & Schedule Overrun Analytics</p>
+                </div>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-glow" id="system-status"><span class="dot"></span> Models Online (XGBoost + LightGBM)</span>
+            </div>
+        </header>
+
+        <!-- KPI Hero Bar -->
+        <section class="kpi-grid">
+            <div class="kpi-card glass-card">
+                <div class="kpi-header">
+                    <span>Predicted Cost Overrun</span>
+                    <div class="kpi-icon icon-red">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                </div>
+                <div class="kpi-value" id="kpi-cost-overrun">$142,500</div>
+                <div class="kpi-subtext" id="kpi-cost-pct">+14.2% Over Baseline</div>
+            </div>
+
+            <div class="kpi-card glass-card">
+                <div class="kpi-header">
+                    <span>Completion Delay</span>
+                    <div class="kpi-icon icon-amber">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                </div>
+                <div class="kpi-value" id="kpi-delay-weeks">3.8 Wks</div>
+                <div class="kpi-subtext" id="kpi-delay-sub">Est. Schedule Slippage</div>
+            </div>
+
+            <div class="kpi-card glass-card">
+                <div class="kpi-header">
+                    <span>Integrated Risk Score</span>
+                    <div class="kpi-icon icon-purple">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                </div>
+                <div class="kpi-value" id="kpi-risk-score">58.4 / 100</div>
+                <div class="kpi-subtext"><span class="risk-badge badge-medium" id="kpi-risk-category">Medium Risk</span></div>
+            </div>
+
+            <div class="kpi-card glass-card">
+                <div class="kpi-header">
+                    <span>Model Confidence</span>
+                    <div class="kpi-icon icon-blue">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                </div>
+                <div class="kpi-value">91.2% R²</div>
+                <div class="kpi-subtext">5-Fold Cross Validated</div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Split Grid -->
+        <main class="dashboard-grid">
+            <!-- Left Panel: Input & Simulation Controls -->
+            <section class="left-panel">
+                <!-- Predictive Input Form -->
+                <div class="glass-card section-card">
+                    <div class="card-title">
+                        <h2>Project Parameters</h2>
+                        <span class="subtitle">AI-Powered Risk Calculation</span>
+                    </div>
+
+                    <form id="prediction-form" class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="name">Project Title</label>
+                            <input type="text" id="name" value="Metropolitan Transit Expansion" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category">
+                                <option value="Infrastructure" selected>Infrastructure</option>
+                                <option value="Commercial Construction">Commercial Construction</option>
+                                <option value="Energy & Utilities">Energy & Utilities</option>
+                                <option value="Software & IT">Software & IT Infrastructure</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="budget">Total Budget ($)</label>
+                            <input type="number" id="budget" value="2500000" min="10000" step="50000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="planned_duration_weeks">Planned Duration (Weeks)</label>
+                            <input type="number" id="planned_duration_weeks" value="36" min="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="team_size">Team Size</label>
+                            <input type="number" id="team_size" value="18" min="1" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <div class="label-with-value">
+                                <label for="complexity_score">Project Complexity Score</label>
+                                <span class="range-val" id="complexity-val">6.5 / 10</span>
+                            </div>
+                            <input type="range" id="complexity_score" min="1" max="10" step="0.5" value="6.5">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contractor_experience_years">Contractor Experience (Yrs)</label>
+                            <input type="number" id="contractor_experience_years" value="8" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="scope_changes_count">Scope Changes Count</label>
+                            <input type="number" id="scope_changes_count" value="3" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-with-value">
+                                <label for="weather_risk_index">Weather Risk Index</label>
+                                <span class="range-val" id="weather-risk-val">0.35</span>
+                            </div>
+                            <input type="range" id="weather_risk_index" min="0" max="1" step="0.05" value="0.35">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-with-value">
+                                <label for="supply_chain_delay_score">Supply Chain Lag</label>
+                                <span class="range-val" id="supply-chain-val">0.25</span>
+                            </div>
+                            <input type="range" id="supply_chain_delay_score" min="0" max="1" step="0.05" value="0.25">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary full-width" id="btn-predict">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            Run Risk Intelligence Analytics
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Scenario Simulation Lab -->
+                <div class="glass-card section-card margin-top">
+                    <div class="card-title">
+                        <h2>Scenario Simulation Lab</h2>
+                        <span class="subtitle">What-If Stress Testing</span>
+                    </div>
+
+                    <div class="scenario-controls">
+                        <div class="form-group">
+                            <div class="label-with-value">
+                                <label for="sim-budget-change">Budget Adjustment (%)</label>
+                                <span class="range-val" id="sim-budget-val">+10%</span>
+                            </div>
+                            <input type="range" id="sim-budget-change" min="-30" max="50" step="5" value="10">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-with-value">
+                                <label for="sim-schedule-change">Schedule Change (Weeks)</label>
+                                <span class="range-val" id="sim-schedule-val">+4 Wks</span>
+                            </div>
+                            <input type="range" id="sim-schedule-change" min="-10" max="20" step="1" value="4">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-with-value">
+                                <label for="sim-weather-delta">Weather Severity Delta</label>
+                                <span class="range-val" id="sim-weather-val">+0.20</span>
+                            </div>
+                            <input type="range" id="sim-weather-delta" min="-0.5" max="0.5" step="0.05" value="0.2">
+                        </div>
+
+                        <button class="btn btn-secondary full-width" id="btn-run-scenario">Execute Stress Test</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Visual Analytics, Explainability & Tools -->
+            <section class="right-panel">
+                <!-- Feature Importance & Explainable AI -->
+                <div class="glass-card section-card">
+                    <div class="card-title">
+                        <h2>Risk Driver Contribution (SHAP Analysis)</h2>
+                        <span class="subtitle">Explainable Feature Importances</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="featureImportanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Computer Vision Site Analyzer -->
+                <div class="glass-card section-card margin-top">
+                    <div class="card-title">
+                        <h2>Computer Vision Site Photo Inspector</h2>
+                        <span class="subtitle">Structural Completeness & Inspection Anomalies</span>
+                    </div>
+
+                    <div class="cv-dropzone" id="cv-dropzone">
+                        <div class="cv-drop-content">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <p>Upload site progress photo or click for demo analysis</p>
+                            <input type="file" id="cv-file-input" accept="image/*" style="display:none;">
+                            <button class="btn btn-sm btn-secondary" id="btn-trigger-upload">Select Image</button>
+                            <button class="btn btn-sm btn-primary" id="btn-demo-cv">Run Demo Photo Inspection</button>
+                        </div>
+                    </div>
+
+                    <div class="cv-results-grid" id="cv-results-container" style="display:none;">
+                        <div class="cv-metric-box">
+                            <span class="label">Structural Completeness</span>
+                            <span class="val text-green" id="cv-completeness">74.5%</span>
+                        </div>
+                        <div class="cv-metric-box">
+                            <span class="label">Structural Risk</span>
+                            <span class="val text-amber" id="cv-structural-risk">22.8</span>
+                        </div>
+                        <div class="cv-anomalies-list full-width">
+                            <h4>Detected Anomalies & Observations:</h4>
+                            <ul id="cv-anomalies-ul">
+                                <li>Normal site progression observed.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations & Mitigation Actions -->
+                <div class="glass-card section-card margin-top">
+                    <div class="card-title">
+                        <h2>AI Actionable Recommendations</h2>
+                        <span class="subtitle">Proactive Resource Optimization</span>
+                    </div>
+                    <ul class="recommendations-list" id="recommendations-list">
+                        <li>Maintain standard site monitoring protocols.</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- Historical Projects Table -->
+        <section class="glass-card table-section margin-top">
+            <div class="card-title">
+                <h2>Project Risk Telemetry Log</h2>
+                <span class="subtitle">Historical Database Records</span>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Budget</th>
+                            <th>Duration</th>
+                            <th>Cost Overrun (%)</th>
+                            <th>Delay (Wks)</th>
+                            <th>Risk Score</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projects-table-body">
+                        <tr><td colspan="9" class="text-center">Loading project records...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
