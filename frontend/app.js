@@ -262,3 +262,4 @@ function updateChart(contributions) {
     chart.data.datasets[0].data = data;
     chart.update();
 }
+
